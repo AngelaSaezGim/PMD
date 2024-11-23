@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Main.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Main.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">//TIP To &lt;b&gt;Run&lt;/b&gt; code, press &lt;shortcut actionId=&quot;Run&quot;/&gt; or</span>
+<span class="s0">// click the &lt;icon src=&quot;AllIcons.Actions.Execute&quot;/&gt; icon in the gutter.</span>
+<span class="s2">fun </span><span class="s1">main</span><span class="s3">() {</span>
+
+    <span class="s0">/* 
+    . El programa debe pedir una cantidad en € al usuario y a continuación mostrará el equivalente en las siguientes divisas: $ (dólares), £ (libras) y ¥ (yenes) sabiendo que el cambio actual es: 
+    - 1 € equivale a 1,16$ 
+    - 1 € equivale a 0,84£ 
+    - 1 € equivale a 132,5 ¥ 
+     */</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s4">&quot;Dime la cantidad de euros&quot;</span><span class="s3">)</span>
+    <span class="s2">var </span><span class="s1">eurosString </span><span class="s3">= </span><span class="s1">readLine</span><span class="s3">()</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s4">&quot;Tienes </span><span class="s2">$</span><span class="s1">eurosString </span><span class="s4">€&quot;</span><span class="s3">)</span>
+
+    <span class="s0">//como pillo de un input, antes de convertir me aseguro de que sea no nulo - ?</span>
+    <span class="s1">eurosString?</span><span class="s3">.</span><span class="s1">let </span><span class="s3">{</span>
+        <span class="s2">val </span><span class="s1">euros </span><span class="s3">= </span><span class="s1">it</span><span class="s3">.</span><span class="s1">toDouble</span><span class="s3">()</span>
+        <span class="s1">println</span><span class="s3">(</span><span class="s4">&quot;Mostraremos el equivalente en otras divisas:&quot;</span><span class="s3">)</span>
+
+        <span class="s0">// Realizamos las conversiones</span>
+        <span class="s1">println</span><span class="s3">(</span><span class="s4">&quot;Dólares = </span><span class="s2">${</span><span class="s1">euros </span><span class="s3">* </span><span class="s5">1.16</span><span class="s2">} </span><span class="s4">$&quot;</span><span class="s3">)</span>
+        <span class="s1">println</span><span class="s3">(</span><span class="s4">&quot;Libras = </span><span class="s2">${</span><span class="s1">euros </span><span class="s3">* </span><span class="s5">0.84</span><span class="s2">} </span><span class="s4">£&quot;</span><span class="s3">)</span>
+        <span class="s1">println</span><span class="s3">(</span><span class="s4">&quot;Yenes = </span><span class="s2">${</span><span class="s1">euros </span><span class="s3">* </span><span class="s5">132.5</span><span class="s2">} </span><span class="s4">¥&quot;</span><span class="s3">)</span>
+    <span class="s3">} </span><span class="s1">?: println</span><span class="s3">(</span><span class="s4">&quot;No se ingresó una cantidad válida.&quot;</span><span class="s3">) </span><span class="s0">// si no = Ponemos esto</span>
+
+<span class="s3">}</span></pre>
+</body>
+</html>
