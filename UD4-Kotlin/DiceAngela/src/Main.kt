@@ -40,7 +40,7 @@ Tendrá las siguientes funciones:
  */
 
 class Dice{
-    var faces: Int
+    var faces: Int = 0
     var quantityOfThrows: Int = 0
 
 

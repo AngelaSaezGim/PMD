@@ -109,11 +109,30 @@ Poner;
       - [12.4.4 De extensión](#1244-de-extensión)
       - [12.4.5 Ambito de funciones y Sobrecarga](#1245-ambito-de-funciones-y-sobrecarga)
   - [13. Programación Orientada a Objetos](#13-programación-orientada-a-objetos)
+    - [13.1. Definición de clase en Kotlin](#131-definición-de-clase-en-kotlin)
+      - [13.1.1. Clase Any](#1311-clase-any)
+    - [13.2. Getters y Setters](#132-getters-y-setters)
+    - [13.3. Contructores](#133-contructores)
+      - [13.3.1. Usar más de un constructor](#1331-usar-más-de-un-constructor)
+      - [13.3.2. Sin constructor](#1332-sin-constructor)
+      - [13.3.3 init y constructores](#1333-init-y-constructores)
+    - [13.4. Visibilidad en clases](#134-visibilidad-en-clases)
+      - [13.4.1. private set y private get](#1341-private-set-y-private-get)
+    - [13.5 Modificador estático - companion object](#135-modificador-estático---companion-object)
+    - [13.6 Funciones Miembro (Métodos)](#136-funciones-miembro-métodos)
+      - [13.6.1 Override en funciones](#1361-override-en-funciones)
+    - [13.7. Singleton](#137-singleton)
+    - [13.8. Herencia - open class](#138-herencia---open-class)
+    - [13.9. Clases Abstractas](#139-clases-abstractas)
+      - [13.9.1 abstract](#1391-abstract)
   - [14. Enum y Data class](#14-enum-y-data-class)
     - [14.1 Enum class](#141-enum-class)
     - [14.2 Data class](#142-data-class)
+      - [14.2.1 Uso Copy](#1421-uso-copy)
+      - [14.2.2 Deconstruir Data Class \_](#1422-deconstruir-data-class-_)
   - [15. Funciones Específicas Kotlin](#15-funciones-específicas-kotlin)
     - [15.1 Funciones de Extensión](#151-funciones-de-extensión)
+      - [15.1.1 Funciones de Extensión y funciones miembro](#1511-funciones-de-extensión-y-funciones-miembro)
     - [15.2 Funciones de Alcance](#152-funciones-de-alcance)
       - [15.2.1 let](#1521-let)
       - [15.2.2 run](#1522-run)
@@ -121,6 +140,11 @@ Poner;
       - [15.2.4 apply](#1524-apply)
       - [15.2.5 with](#1525-with)
     - [15.3 Funciones Lambda](#153-funciones-lambda)
+      - [15.3.1. Funciones flecha](#1531-funciones-flecha)
+      - [15.3.2. Utilidad y Sintaxis Lambdas;](#1532-utilidad-y-sintaxis-lambdas)
+      - [15.3.3. Crear funciones callback](#1533-crear-funciones-callback)
+      - [15.3.4. Devolver diferentes respuestas desde una función](#1534-devolver-diferentes-respuestas-desde-una-función)
+      - [15.3.5. Ofrecer al programador que introduzca su propia lógica](#1535-ofrecer-al-programador-que-introduzca-su-propia-lógica)
 
 
 ## 1. Variables
@@ -1363,7 +1387,7 @@ públicas (esto no se permite en Java).
 Si en un archivo .kt solo se define una clase -> nombre del archivo = nombre de la clase.
 Si en un archivo .kt se definen varias clases -> nombre representativo.
 
-Definición de clase en Kotlin:
+### 13.1. Definición de clase en Kotlin
 ```kotlin
 class Person{
 
@@ -1384,6 +1408,7 @@ val product = Product("PS3",434)
 println("${product.name}: ${product.finalPrice(10.0)} euros")
 ```
 
+#### 13.1.1. Clase Any
 
 TODAS LAS CLASES HEREDA DE LA CLASE Any - (Java=Object)
 
@@ -1392,10 +1417,9 @@ La clase Any define tres métodos que heredarán sus hijas:
 *hashCode → devuelve el código hash de un objeto
 *toString → devuelve la representación en String de un objeto
 
-Getters y Setters
+### 13.2. Getters y Setters
 
-Los getters y setters se deben definir tras cada
-propiedad.
+Los getters y setters se deben definir tras cada propiedad.
 
 VERSION LARGA
 ```kotlin
@@ -1447,7 +1471,7 @@ class Product{
 ```
 
 
-Contructores
+### 13.3. Contructores
 El constructor se define con la palabra constructor.
 
 ```kotlin
@@ -1463,8 +1487,7 @@ class Product{
 ```
 
 VERSION ACORTADA CONSTRUCTOR (Recomendada)
-CONSTRUCTOR IMPLÍCITO (ni se pone)
-= CONTRUCTOR PRIMARIO
+CONSTRUCTOR IMPLÍCITO (ni se pone) = es el constructor primario
 
 ```kotlin 
 //ES LO MISMO QUE LO DE ARRIBA
@@ -1479,6 +1502,7 @@ ps5.name = "PlayStation NewUpdate"
 println(ps5.name)
 ```
 
+#### 13.3.1. Usar más de un constructor
 ¿QUE PASA SI QUIERO USAR MAS CONSTRUCTORES?
 
 -Constructores Secundarios -> Se incluirán en el cuerpo de la clase
@@ -1529,6 +1553,8 @@ val game = Product("GTA", 39)
 val controller = Product("Dual Sense")
 ```
 
+#### 13.3.2. Sin constructor
+
 NO constructores
 
 Puede no haber constructores 
@@ -1546,10 +1572,26 @@ val game = Product(){
   game.name = "GTA VI"
   println("Se vende ${game.name})
 }
-
 ```
 
-Visibilidad en clases
+#### 13.3.3 init y constructores
+
+Constructor primario - > Requerimos realizar acciones sobre propiedades
+NADA MAS CREARSE EL OBJETO SE ACTIVARÁ (nombre que insertemos pone mayúscula)
+
+```kotlin
+class Product(var name: String, var price: Double){
+  init{
+    name = name.uppercase()
+  }
+}
+
+//Uso
+val product = Product("Switch",456)
+println("Se vende ${product.name}) //Pondra SWITCH
+```
+
+### 13.4. Visibilidad en clases
 
 Si no se indica lo contrario las clases, propiedades y
 métodos por defecto son públicas (public)
@@ -1602,6 +1644,8 @@ product.name = "PS5" //error
 product.price = 456.23 //error
 ```
 
+#### 13.4.1. private set y private get
+
 Solución
 
 Solución de Java -> Crear metodos públicos para acceder (Java) - NO RECOMENDABLE EN KOTLIN
@@ -1624,25 +1668,7 @@ class Product(var name: String, var price: Double){
 }
 ```
 
-
-init y constructores
-
-Constructor primario - > Requerimos realizar acciones sobre propiedades
-NADA MAS CREARSE EL OBJETO SE ACTIVARÁ (nombre que insertemos pone mayúscula)
-
-```kotlin
-class Product(var name: String, var price: Double){
-  init{
-    name = name.uppercase()
-  }
-}
-
-//Uso
-val product = Product("Switch",456)
-println("Se vende ${product.name}) //Pondra SWITCH
-```
-
-Modificador estático
+### 13.5 Modificador estático - companion object
 
 Se pueden definir propiedades y funciones estáticas
 Uso companion object (dentro de la clase)
@@ -1665,7 +1691,8 @@ class Product(var name: String, var price: Double){
     }
   }
 }
-
+```
+```kotlin
 //Uso
 val product = Product("Switch",456)
 val product = Product("Ps5",45336)
@@ -1677,7 +1704,7 @@ println(Product.quantityOfProducts)
 
 ```
 
-Funciones Miembro (Métodos)
+### 13.6 Funciones Miembro (Métodos)
 
 Como crear una función miembro
 
@@ -1697,7 +1724,7 @@ class Product(var name: String, var price: Double){
 }
 ```
 
-Override en funciones
+#### 13.6.1 Override en funciones
 
 Si se sobreescribe una función HEREDADA (ya existe en clase madre) - Añadimos override
 //ej toString() es heredada de la madre por defecto (Any)
@@ -1712,7 +1739,7 @@ class Product(var name: String, var price: Double){
 *Ejemplo declaración objeto paradigma Kotlin
 FORMA RECOMENDADA
 ```kotlin
-              //constructor primario
+//constructor primario
 class Product(var name: String){
   var price: Double = -1.0
   //getters y setters implícitos
@@ -1731,12 +1758,99 @@ class Product(var name: String){
 }
 ```
 
+### 13.7. Singleton
+
+En Kotlin se pueden crear singleton que son objetos únicos en su clase, esto significa que NO podrá haber más instancias de esa clase
+
+Se le pueden añadir funciones de extensión. Si se declaran de manera global en el archivo .kt se podrán añadir funciones de extensión como con cualquier otra clase.
+
+```kotlin
+object Author{
+  var name = "Alex Torres"
+  var company = "2 DAM"
+  var date = Date()
+
+  override fun toString() : String {
+          return ""$name ($company)
+                      | $date""".trimMargin()
+  }
+}
+```
+
+### 13.8. Herencia - open class
+
+En Kotlin por defecto todas las clases son finales = NO puede haber herencia si no se indica explícitamente.
+¿Como indicar que una clase PUEDE SER SUPERCLASE? - open class
+
+```kotlin
+//contructor primario y getters/setters por defecto
+// OPEN CLASS
+open class Product(var name: String, var price: Double)
+
+//Monitor hereda (llama al constructor padre)
+class Monitor(name: String, price: Double): Product(name, price)
+```
+
+Con ello, podemos añadir propiedaades y métodos nuevos
+
+```kotlin
+open class Product(var name: String, var price: Double)
+
+// En la clase hija automáticamente se crea el constructor primario que llamará al constructor de la clase madre Product(name, price)
+class Monitor(name: String, price: Double): Product(name, price){
+  var size: Int = 0
+
+//si le añado size necesitaré un segundo constructor 
+//this (name,price) = LO RECIBE EL PADRE (nos da el name y el price) - llamamos al primario en verdad
+  constructor(name: String, price: Double, size: Int): this(name, price)
+
+  override fun toString(): String {
+    return "$name ($size\"): $price euros"
+  }
+}
+```
+
+### 13.9. Clases Abstractas
+
+#### 13.9.1 abstract
+
+Una clase abstracta no puede instanciar objetos -Es una PLANTILLA
+
+En kotlin;
+```kotlin
+
+abstract class Product(var name: String, var trademark: String){
+
+//OVERRIDE
+  abstract var price: Double
+  abstract fun powerOn()
+  abstract fun powerOff()
+
+  fun information(){
+    println("$name ("$trademark): $price euros")
+  }
+}
+```
+Uso de override var y override fun para usarlos
+```kotlin
+// OVERRIDE VAR !!!!
+class Monitor(name : String, trademark: String, var color: String, override var price: Double) : Product(name, trademark){
+
+  override fun powerOn(){
+    println("encendido")
+  }
+
+  override fun powerOff(){
+    println("apagado)
+  }
+}
+```
+
 ## 14. Enum y Data class
 
 ### 14.1 Enum class
 
-enum class permiten definir un conjunto de constantes relacionadas
-entre sí - Disponer de valores sin temor a errores
+enum class permiten definir un conjunto de constantes relacionadas entre sí - Disponer de valores sin temor a errores
 
 Declaramos enum
 ```kotlin
@@ -1771,8 +1885,7 @@ println(color.ordinal) // 0 posición
 ### 14.2 Data class
 
 Clases simples que solo contienen atributos (datos)
-Las data class son una manera de modelar los datos y la finalidad de sus
-objetos es simplemente almacenar datos.
+Las data class son una manera de modelar los datos y la finalidad de sus objetos es simplemente almacenar datos.
 
 -Util interactuar con otras clases o API's externas
 
@@ -1806,14 +1919,14 @@ Output;
  Manga(name=Dragon Ball,type=Shonen,volumes=45)
  Son mangas diferentes
 
- Uso Copy
+#### 14.2.1 Uso Copy
 Mediante la función copy se pueden copiar objetos completos y durante la copia se pueden cambiar valores de las propiedades.
 ```kotlin
 var db = dragonBall.copy()
 var dbz = dragobBall.copy(nombre="DBZ")
 ```
 
-Deconstruir Data Class
+#### 14.2.2 Deconstruir Data Class _
 Se puede extraer el valor de sus propiedades a variables.
 
 Si hay algún valor que no se quiera se debe poner el carácter _ en su lugar.
@@ -1828,97 +1941,6 @@ val(name) = deathNote
 println("Manga $name")
 ```
 
-Singleton
-
-En Kotlin se pueden crear singleton que son objetos únicos en su clase, esto significa que NO podrá haber más instancias de esa clase
-
-Se le pueden añadir funciones de extensión. Si se declaran de manera global en el archivo .kt se podrán añadir funciones de extensión 
-como con cualquier otra clase.
-
-```kotlin
-object Author{
-  var name = "Alex Torres"
-  var company = "2 DAM"
-  var date = Date()
-
-  override fun toString() : String {
-          return ""$name ($company)
-                      | $date""".trimMargin()
-  }
-}
-```
-
-Herencia
-
-Open Class
-
-En Kotlin por defecto todas las clases son finales = NO puede haber herencia si no se indica explícitamente.
-¿Como indicar que una clase PUEDE SER SUPERCLASE?
-
-```kotlin
-//contructor primario y getters/setters por defecto
-// OPEN CLASS
-open class Product(var name: String, var price: Double)
-
-//Monitor hereda (llama al constructor padre)
-class Monitor(name: String, price: Double): Product(name, price)
-```
-
-Con ello, podemos añadir propiedaades y métodos nuevos
-
-```kotlin
-open class Product(var name: String, var price: Double)
-
-// En la clase hija automáticamente se crea el constructor primario que llamará al constructor de la clase madre Product(name, price)
-class Monitor(name: String, price: Double): Product(name, price){
-  var size: Int = 0
-
-//si le añado size necesitaré un segundo constructor 
-//this (name,price) = LO RECIBE EL PADRE (nos da el name y el price) - llamamos al primario en verdad
-  constructor(name: String, price: Double, size: Int): this(name, price)
-
-  override fun toString(): String {
-    return "$name ($size\"): $price euros"
-  }
-}
-```
-
-Clases Abstractas
-
-Una clase abstracta no puede instanciar objetos - PLANTILLA
-
-En kotlin;
-```kotlin
-
-abstract class Product(var name: String, var trademark: String){
-
-//OVERRIDE
-  abstract var price: Double
-  abstract fun powerOn()
-  abstract fun powerOff()
-
-  fun information(){
-    println("$name ("$trademark): $price euros")
-  }
-}
-
-// OVERRIDE VAR !!!!
-class Monitor(name : String, trademark: String, var color: String, override var price: Double) : Product(name, trademark){
-
-  override fun powerOn(){
-    println("encendido")
-  }
-
-  override fun powerOff(){
-    println("apagado)
-  }
-}
-```
-
-
-
-
-
 ## 15. Funciones Específicas Kotlin
 
 ### 15.1 Funciones de Extensión
@@ -1929,11 +1951,9 @@ Las funciones de extensión se definen fuera de la definición de la clase por e
 
 Aunque se definen fuera - > es como si se hubiera definido desde dentro comportándose como un método más de la clase
 
-Estas funciones se definen como otras funciones pero usando el nombre de
-la clase que se quiere extender.
-
 Función de extensión de una clase existente:
 ```kotlin
+//Estas funciones se definen como otras funciones pero usando el nombre de la clase que se quiere extender.
 //Se añade una funcion a la clase Int
 fun Int.isOdd(): Boolean {
   return this % 2 != 0
@@ -1967,7 +1987,7 @@ fun MutableList<Int>.addition(quantity: Int): MutableList<Int>{
 //[3,4,5,6,7,8,9,10]
 ```
 
-Funciones de Extensión y funciones miembro
+#### 15.1.1 Funciones de Extensión y funciones miembro
 
 \*Una función miembro es una función que pertenece directamente a una clase y puede acceder a todas las propiedades y métodos de la misma
 
@@ -1982,7 +2002,6 @@ fun Int.time(value :Int){
 Si una clase ya tiene una función miembro con el mismo nombre que la extensión, siempre se llamará a la función miembro al invocarla, incluso si la extensión está definida en el mismo contexto.
 
 ```kotlin
-Copiar código
 class MiClase {
     fun miFuncion() {
         println("Soy la función miembro")
@@ -2028,11 +2047,6 @@ Permiten ejecutar un bloque de código en el contexto del objeto que las llama
 Utilidad - Al ejecutarse en el contexto, dentro del cuerpo está disponible dicho objeto - Por ello devuelven un valor pero NO ES NECESARIO capturarlo (guardarlo) en ninguna variable.
 
 Existen cinco funciones de alcance:
- let
- apply
- run
- also
- with
 
 Todas las funciones de alcance se utilizan con un bloque de llaves { }
 
@@ -2045,6 +2059,7 @@ Todas las funciones de alcance se utilizan con un bloque de llaves { }
 | also           | Seguir realizando instrucciones sobre el objeto.                                                     | Propio objeto accesible con it   | Propio objeto                      |
 | with           | Agrupar llamadas a funciones de un objeto.                                                           | Propio objeto accesible con this | Resultado de la última instrucción |
 
+Ejemplo de uso;
 ```kotlin
 class Product(var name: String, var price: Double, var year: Int)
 val product = Product("PS5",43,2021)
@@ -2089,6 +2104,7 @@ var result = product.let{ // Contexto
 
 Tiene dos usos;
 -> Llamada desde un objeto como let, pero no controla si la variable es null
+
 Contexto; El objeto desde el cual se llama, accesible con this.
 No es necesario poner this. para acceder a las propiedades.
 Devuelve: el resultado de la última instrucción.
@@ -2112,6 +2128,7 @@ println(result)
 //557.43
 ```
 -> Llamada sin usar objeto.
+
 El contexto: no hay contexto.
 Devuelve: el resultado de la última instrucción.
 ```kotlin
@@ -2188,8 +2205,8 @@ with(product){
 
 Las funciones lambda, también llamadas funciones anónimas o funciones flecha son funciones que no están declaradas (no tienen identificador) y se utilizan como una expresión.
 
-Se escriben entre llaves { }, pueden tener parámetros o no y
-deben tener un cuerpo. Si no tiene parámetros se deben poner directamente las instrucciones.
+Se escriben entre llaves { }, pueden tener parámetros o no y deben tener un cuerpo.
+Si no tiene parámetros se deben poner directamente las instrucciones.
 
 ```kotlin
 //Simple
@@ -2210,7 +2227,9 @@ text //^lambda
 }
 ```
 
-Funciones flecha - Si tiene parámetros, para separarlos del cuerpo se utilizan los caracteres ->
+#### 15.3.1. Funciones flecha 
+
+Si tiene parámetros, para separarlos del cuerpo se utilizan los caracteres ->
 
 En las lambdas escritas anteriormente es Kotlin quien deduce los tipos de datos. Se pueden indicar explícitamente los tipos de datos:
 ```kotlin
@@ -2230,14 +2249,15 @@ En las lambdas escritas anteriormente es Kotlin quien deduce los tipos de datos.
 }
 ```
 
-Las funciones lambda se utilizan como una expresión, esto significa que deben de estar asignadas a algún elemento. Si se asigna una lambda a una variable su uso es el mismo que con una función normal = NO NUEVA FUNCIONALIDAD
+Las funciones lambda se utilizan como una expresión = deben de estar asignadas a algún elemento. 
+Si se asigna una lambda a una variable su uso es el mismo que con una función normal = NO NUEVA FUNCIONALIDAD
 
 ```kotlin
 val add: (Int,Int) -> Int = {number1: Int, number2: Int -> number1 + number2 }
 println(add(3,45)) //nada que no se pueda hacer con una función normal
 ```
 
-Utilidad Lambdas;
+#### 15.3.2. Utilidad y Sintaxis Lambdas;
 
 Las funciones lambda se pueden pasar como parámetros a otras funciones.
 Gracias al paso de lambdas como parámetro en funciones se puede:
@@ -2262,7 +2282,7 @@ En el caso de que la lambda no reciba parámetros ni devuelva nada:
 fun nameOfFun(parameter1: Type, lambdaName: () -> Unit) { … }
 ```
 
-Crear funciones callback
+#### 15.3.3. Crear funciones callback
 
 Las funciones callback permiten asegurarse que un conjunto de instrucciones se ejecuta después de una instrucción concreta (Cuando se acabe esa función, se ejecuta otra cosa). ej ejecución asíncronca, hilos..
 
@@ -2294,7 +2314,7 @@ doLoginGuest{
 }
 ```
 
-Devolver diferentes respuestas desde una función
+#### 15.3.4. Devolver diferentes respuestas desde una función
 
 Se pueden pasar varias funciones lambda como parámetro = se puede ejecutar una u otra función lambda según se necesite
 
@@ -2370,7 +2390,7 @@ fun calculate{
 }
 ```
 
-Ofrecer al programador que introduzca su propia lógica
+#### 15.3.5. Ofrecer al programador que introduzca su propia lógica
 
 Si la función calculate estuviera en una librería externa al usarla se da la opción al programador de incorporar todas las instrucciones que quiera.
 
