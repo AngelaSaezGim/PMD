@@ -1526,7 +1526,8 @@ class Product{
 ```
 
 VERSION CORTA
-```kotlin       //Constructor primario
+```kotlin       
+//Constructor primario
 class Product (var name: String, var price: Double = -1.0){
   
     //constructor secundario (this, es como super, hereda del primario)
